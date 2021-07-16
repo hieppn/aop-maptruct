@@ -1,0 +1,94 @@
+openapi: 3.0.0
+info:
+  description: API specification for profile microservice
+  version: 3.3.4
+  title: AOP Spring Boot Data MongoDB API
+servers:
+  - url: http://localhost:8082/
+paths:
+  /person/{id}:
+    get:
+      tags:
+        - findPersonById
+      summary: find person by id
+      operationId: findPersonById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: id
+          schema:
+            type: object
+      responses:
+        '200':
+          description: successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonModel'
+  /person:
+    post:
+      tags:
+        - savePerson
+      summary: save Person
+      operationId: savePerson
+      requestBody:
+        description: firstName and lastName
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePersonRequest'
+      responses:
+        201:
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectCreationSuccessResponse'
+    get:
+      tags:
+        - getPersons
+      summary: Get all
+      operationId: getPersons
+      responses:
+        200:
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPersons'
+components:
+  schemas:
+    ObjectCreationSuccessResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        responseCode:
+          type: integer
+    CreatePersonRequest:
+      type: object
+      required:
+        - firstName
+        - lastName
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+    GetPersons:
+      type: object
+      properties:
+        people:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonModel'
+    PersonModel:
+      type: object
+      properties:
+        id:
+          type: object
+        firstName:
+          type: string
+        familyName:
+          type: string
